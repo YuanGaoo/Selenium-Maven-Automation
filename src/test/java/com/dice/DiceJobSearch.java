@@ -13,7 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import okio.Buffer;
+
 
 //1)Create arraylist of keywords.
 //add 20 different keyworks
@@ -35,13 +35,11 @@ import okio.Buffer;
 //we looped.
 //
 //commit > push > share your github link
-
 public class DiceJobSearch {
 	public static void main(String[] args) throws IOException {
 		WebDriverManager.chromedriver().setup();
 		WebDriver driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		FileReader fr = new FileReader("Information.txt");
 		String url = "https://dice.com";
 		String[] keyword;
 		String jobtitle;
@@ -50,7 +48,9 @@ public class DiceJobSearch {
 		ArrayList<String> ls = new ArrayList<>();
 		ArrayList<String> result = new ArrayList<>();
 
-		BufferedReader bf = new BufferedReader(fr);
+	try(	FileReader fr = new FileReader("Information.txt");
+		BufferedReader bf = new BufferedReader(fr)){
+		
 		String value;
 		while ((value = bf.readLine()) != null) {
 			ls.add(value);
@@ -77,9 +77,20 @@ public class DiceJobSearch {
 			}
 			driver.navigate().back();
 			
-
-		}
+			bf.close();
+			}
+	}
+		
+		catch(FileNotFoundException e){
+			e.printStackTrace();
+		}catch(IOException e) {
+			e.printStackTrace();
+			}
+		
+		
 		driver.close();
+		
+		
 		
 		for(String allInfo:result) {
 			System.out.println(allInfo);
